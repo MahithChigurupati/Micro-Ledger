@@ -1,5 +1,9 @@
 const nodemailer = require("nodemailer");
 
+const healthCheck = async (req, res) => {
+  res.send("Connection established successfully to Email Service.");
+};
+
 const sendEmail = async (userEmail, pdfFilePath) => {
   try {
     // Create a transporter using the default SMTP transport
@@ -35,5 +39,6 @@ const sendEmail = async (userEmail, pdfFilePath) => {
 };
 
 module.exports = {
+  healthCheck,
   sendEmail,
 };

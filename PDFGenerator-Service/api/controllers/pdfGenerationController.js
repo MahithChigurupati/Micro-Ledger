@@ -1,5 +1,9 @@
 const PDFDocument = require("pdfkit");
 
+const healthCheck = async (req, res) => {
+  res.send("Connection established successfully from PDF Generator.");
+};
+
 const generatePDF = (transactions, res) => {
   // Create a new PDF document
   const doc = new PDFDocument();
@@ -31,5 +35,6 @@ const generatePDF = (transactions, res) => {
 };
 
 module.exports = {
+  healthCheck,
   generatePDF,
 };

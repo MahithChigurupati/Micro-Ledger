@@ -7,7 +7,11 @@ const path = require("path");
 const currentDir = __dirname;
 
 // Define the relative path to the CSV file from the script's directory
-const csvFilePath = path.join(currentDir, "../../transactions.csv");
+const csvFilePath = path.join(currentDir, "../model/transactions.csv");
+
+const healthCheck = async (req, res) => {
+  res.send("Connection established successfully from DB.");
+};
 
 const collectTransactions = (userEmail, fromDate, toDate) => {
   return new Promise((resolve, reject) => {
@@ -54,5 +58,6 @@ const collectTransactions = (userEmail, fromDate, toDate) => {
 };
 
 module.exports = {
+  healthCheck,
   collectTransactions,
 };
