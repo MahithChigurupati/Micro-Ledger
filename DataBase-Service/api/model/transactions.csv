@@ -1,0 +1,15 @@
+﻿user_email,date_of_transaction,amount
+user1@example.com,1/10/23,100
+user2@example.com,1/12/23,75
+user3@example.com,1/15/23,50
+user1@example.com,1/10/23,25
+user2@example.com,1/12/23,0
+user3@example.com,1/15/23,-25
+user1@example.com,1/10/23,-50
+user2@example.com,1/12/23,-75
+user3@example.com,1/15/23,-100
+user1@example.com,1/10/23,-125
+user2@example.com,1/12/23,-150
+user3@example.com,1/15/23,-175
+user1@example.com,1/10/23,-200
+user2@example.com,1/12/23,-225
