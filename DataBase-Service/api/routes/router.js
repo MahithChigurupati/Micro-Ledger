@@ -6,7 +6,7 @@ const dbController = require("../controllers/dbController");
 // Route for GET method to check connection
 router.get("/healthz", dbController.healthCheck);
 
-// Route for POST method to collect transactions
+// Route for POST method to filter transactions
 router.post("/collectTransactions", dbController.collectTransactions);
 
 module.exports = router;

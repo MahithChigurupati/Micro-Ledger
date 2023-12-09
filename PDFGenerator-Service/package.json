@@ -1,5 +1,5 @@
 {
-  "name": "PDFGenerator-Service",
+  "name": "pdfgeneration-service",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -14,7 +14,9 @@
     "nodemon": "^3.0.2"
   },
   "dependencies": {
+    "amqplib": "^0.10.3",
     "express": "^4.18.2",
-    "pdfkit": "^0.14.0"
+    "pdfkit": "^0.14.0",
+    "dotenv": "^16.3.1"
   }
 }

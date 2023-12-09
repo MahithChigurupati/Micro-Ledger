@@ -1,13 +1,21 @@
-// initializing server with a port
-
 const app = require("./api/app.js");
 
-//using dotenv for accessing environment variables
 require("dotenv").config();
 
 const PORT = `${process.env.PORT}`;
 
-//server listening on port <PORT> for incoming requests
+const consumeMessages = require("./api/messageQueue/consumer.js");
+
 app.listen(PORT, () => {
-  console.log(`running on port ${PORT}`);
+  console.log(`Running on port ${PORT}`);
+
+  // Initiate the RabbitMQ consumer
+  const queueName = "getTxs";
+  consumeMessages(queueName)
+    .then(() => {
+      console.log(`Consumer listening on queue ${queueName}`);
+    })
+    .catch((error) => {
+      console.error("Failed to start the consumer:", error);
+    });
 });

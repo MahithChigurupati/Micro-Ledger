@@ -1,37 +1,58 @@
+const fs = require("fs");
+const path = require("path");
 const PDFDocument = require("pdfkit");
 
 const healthCheck = async (req, res) => {
   res.send("Connection established successfully from PDF Generator.");
 };
 
-const generatePDF = (transactions, res) => {
-  // Create a new PDF document
-  const doc = new PDFDocument();
+const generatePDF = async (transactions, userEmail) => {
+  return new Promise((resolve, reject) => {
+    const basePdfDir = path.join(__dirname, "../../../PDFs");
 
-  // Set response headers for PDF download
-  res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", "attachment; filename=transactions.pdf");
+    // Create a directory path for the specific user
+    const userPdfDir = path.join(basePdfDir, userEmail);
 
-  // Pipe the PDF output to the response stream
-  doc.pipe(res);
+    if (!fs.existsSync(userPdfDir)) {
+      fs.mkdirSync(userPdfDir, { recursive: true });
+    }
 
-  // Add content to the PDF
-  doc.fontSize(14).text("Transaction List", { align: "center" });
-  doc.moveDown();
+    const pdfFileName = `Statement_${Date.now()}.pdf`;
+    const pdfPath = path.join(userPdfDir, pdfFileName);
 
-  // Create a table with headers
-  const tableHeaders = ["Date", "Amount"];
-  doc.table({
-    headers: tableHeaders,
-    rows: transactions.map((transaction) => [
-      transaction.date_of_transaction.toDateString(),
-      `$${transaction.amount.toFixed(2)}`,
-    ]),
-    widths: [150, 150], // Adjust column widths as needed
+    // Create a new PDF document
+    const doc = new PDFDocument();
+    const stream = fs.createWriteStream(pdfPath);
+    doc.pipe(stream);
+
+    doc.fontSize(14).text("Transaction List", { align: "center" });
+    doc.moveDown();
+
+    // Add transactions to the PDF
+    transactions.forEach((transaction) => {
+      const transactionDate = new Date(
+        transaction.date_of_transaction
+      ).toDateString();
+      doc.text(
+        `Date: ${transactionDate}, Amount: $${transaction.amount.toFixed(2)}`
+      );
+      doc.moveDown();
+    });
+
+    doc.end();
+
+    // Resolve the promise once the file stream is finished
+    stream.on("finish", () => {
+      console.log(`PDF generated at: ${pdfPath}`);
+      resolve(pdfPath); // Resolve with the path to the generated PDF
+    });
+
+    // Handle any errors
+    stream.on("error", (error) => {
+      console.error("Error generating PDF:", error);
+      reject(error); // Reject the promise if there's an error
+    });
   });
-
-  // End the PDF document
-  doc.end();
 };
 
 module.exports = {
