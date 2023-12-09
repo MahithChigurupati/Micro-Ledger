@@ -4,6 +4,7 @@ logs
 npm-debug.log*
 
 .DS_Store
+PDFs/
 
 # Dependency directories
 node_modules/
